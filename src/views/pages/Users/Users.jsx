@@ -23,6 +23,7 @@ export default function Users(props){
   const classes = useStyles();
 
   const [userName, setUserName] = useState("");
+  const [error, setError] = useState(false);
 
   const [users, setUsers] = useState([]
     
@@ -30,10 +31,12 @@ export default function Users(props){
 
   const handleAdduser = (e) =>{
     e.preventDefault();
-    setUsers([...users, userName]);
-
-    console.log(users);
-    console.log(userName);
+    if( userName.trim().length > 0){
+      setUsers([...users, userName]);
+      setError(false);
+    }else{
+      setError(true);
+    }
   }
 
 	return (
@@ -45,7 +48,7 @@ export default function Users(props){
 				</Grid>
 				<Grid item xs={12}>
           <Paper className={classes.paper} elevation={3}>
-            <UsersForm handleAdduser={handleAdduser} setUserName={setUserName} />
+            <UsersForm handleAdduser={handleAdduser} setUserName={setUserName} error={error}/>
 					</Paper>
 				</Grid>
 

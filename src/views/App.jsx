@@ -12,6 +12,7 @@ import { CssBaseline, makeStyles } from '@material-ui/core';
 // Pages
 import Home from "./pages/Home/Home";
 import Users from "./pages/Users/Users";
+import Projects from "./pages/Projects/Projects";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -55,6 +56,7 @@ export default function App() {
             <div className={classes.appBarSpacer} />
               <Route path="/" exact component={Home}/>
               <Route path="/users" component={Users} />
+              <Route path="/projects" component={Projects} />
           </main>
           </BrowserRouter>
       </div>
