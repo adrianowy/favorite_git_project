@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { BrowserRouter, Route } from 'react-router-dom'
 import './App.css'
 
@@ -10,8 +10,8 @@ import SideBar from '../components/layout/SideBar'
 import { CssBaseline, makeStyles } from '@material-ui/core';
 
 // Pages
-import Home from "./pages/Home";
-import Users from "./pages/Users";
+import Home from "./pages/Home/Home";
+import Users from "./pages/Users/Users";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -33,7 +33,7 @@ export default function App() {
 
   const classes = useStyles();
 
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = useState(true);
     
   const handleDrawerOpen = () => {
     setOpen(true);

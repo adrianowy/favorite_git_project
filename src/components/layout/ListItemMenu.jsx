@@ -1,28 +1,46 @@
 import React from 'react';
 import { Link } from 'react-router-dom'
 
-import { ListItem, ListItemIcon, ListItemText, Icon } from '@material-ui/core';
+import { ListItem, ListItemIcon, ListItemText, Icon, makeStyles } from '@material-ui/core';
 
-const ListItemMenu = (
+const useStyles = makeStyles((theme) => ({
+  menuLink: {
+      textDecoration: 'none',
+  }
+}));
+
+export default function ListItemMenu(){
+
+  const classes = useStyles();
+
+  const menus = [
+    {
+      title: "Home",
+      icon: "home",
+      to: "/"
+    },
+    {
+      title: "Users",
+      icon: "people",
+      to: "/users"
+    }
+  ]
+
+  return (
     <>
-      <Link to="/">
-        <ListItem button>
-            <ListItemIcon>
-              <Icon>home</Icon>
-            </ListItemIcon>
-            <ListItemText primary="Home" />
-        </ListItem>
-      </Link>
-
-      <Link to="/users">
-        <ListItem button>
-          <ListItemIcon>
-            <Icon>people</Icon>
-          </ListItemIcon>
-          <ListItemText primary="Users" />
-        </ListItem>
-      </Link>
+      {
+        menus.map((m, i) => (
+          <Link to={m.to} style={{ color: 'inherit', textDecoration: 'none' }} key={i}>
+          <ListItem button>
+              <ListItemIcon>
+                <Icon>{m.icon}</Icon>
+              </ListItemIcon>
+              <ListItemText primary={m.title} />
+          </ListItem>
+        </Link>
+        ))
+      }
+      
     </>
-  );
-
-  export default ListItemMenu;
+  )
+}
