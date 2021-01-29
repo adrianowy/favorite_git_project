@@ -2,14 +2,9 @@ import React from 'react'
 
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
-import Drawer from '@material-ui/core/Drawer';
-import List from '@material-ui/core/List';
-import Icon from '@material-ui/core/Icon';
-import Divider from '@material-ui/core/Divider';
-import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
+import { Drawer, List, Icon, IconButton, Divider, Typography } from '@material-ui/core';
 
-import mainListItems from './listItemMenu'
+import ListItemMenu from './ListItemMenu'
 
 const drawerWidth = 240;
 
@@ -70,21 +65,21 @@ export default function TopBar(props){
     const classes = useStyles();
 
     return(
-        <Drawer
-          variant="permanent"
-          classes={{
-            paper: clsx(classes.drawerPaper, !props.sideBarStatus && classes.drawerPaperClose),
-          }}
-          open={props.sideBarStatus}
-        >
-          <div className={classes.toolbarIcon}>
-            <Typography>FAVORITE PROJECT</Typography>
-            <IconButton onClick={props.handleDrawerClose}>
-              <Icon>chevron_left</Icon>
-            </IconButton>
-          </div>
-          <Divider />
-          <List>{mainListItems}</List>
-        </Drawer>
+      <Drawer
+        variant="permanent"
+        classes={{
+          paper: clsx(classes.drawerPaper, !props.sideBarStatus && classes.drawerPaperClose),
+        }}
+        open={props.sideBarStatus}
+      >
+        <div className={classes.toolbarIcon}>
+          <Typography>FAVORITE PROJECT</Typography>
+          <IconButton onClick={props.handleDrawerClose}>
+            <Icon>chevron_left</Icon>
+          </IconButton>
+        </div>
+        <Divider />
+        <List>{ListItemMenu}</List>
+      </Drawer>
     )
 }
