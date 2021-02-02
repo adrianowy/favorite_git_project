@@ -11,17 +11,16 @@ ENV PATH /app/node_modules/.bin:$PATH
 
 # install app dependencies
 COPY package.json ./
-COPY package-lock.json ./
 COPY yarn.lock ./
 
-RUN npm install
-RUN npm install --global yarn
+RUN yarn install
 
 # add app
 COPY . ./
 
 EXPOSE 3000
 
+USER node
+
 # start app
-# CMD ["npm", "start"]
 CMD ["yarn", "start"]
