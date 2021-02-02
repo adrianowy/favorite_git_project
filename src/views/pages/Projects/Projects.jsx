@@ -64,8 +64,9 @@ export default function Projects(props){
         const updateUsersFavorite = JSON.parse(localStorage.getItem('users')).map(mapUser => {
 
             if(mapUser.id === activeUser.id) {
-                if(mapUser.favorites.filter(fav => fav.id === repo.id).length == 0 ){
-                    mapUser.favorites.push(repo);
+                if(mapUser.favorites.filter(fav => fav.id === repo.id).length === 0 ){
+                    // mapUser.favorites.push(repo);
+                    mapUser.favorites.push( { ...repo, favorite: !repo.favorite } );
                 }else{
                     mapUser.favorites = mapUser.favorites.filter(fav => fav.id !== repo.id);
                 }
@@ -102,7 +103,7 @@ export default function Projects(props){
                             owner: item.user.login,
                             project: item.title,
                             reference: item.repository_url.replace("api.", "").replace("repos/", ""),
-                            favorite : ( (activeUser.favorites.filter(f => f.id == item.id).length > 0) ? true : false)
+                            favorite : ( (activeUser.favorites.filter(f => f.id === item.id).length > 0) ? true : false)
                         }
                     ));
                     setRepositories(rows);

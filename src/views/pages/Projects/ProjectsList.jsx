@@ -13,7 +13,7 @@ import {
     IconButton
 } from '@material-ui/core'
 
-export default function ProjectsDataGrid(props){
+export default function ProjectsList(props){
 
 
     return (
@@ -34,7 +34,6 @@ export default function ProjectsDataGrid(props){
                                         <Icon>launch</Icon>
                                     </IconButton>
                                 </a>
-
                                 <IconButton edge="end" aria-label="favorite" title='Clock to favorite this project' onClick={() => props.handleFavorite(repo)}>
                                     <Icon color={repo.favorite ? 'primary' : 'action'} >star</Icon>
                                 </IconButton>
