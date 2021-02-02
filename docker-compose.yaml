@@ -1,0 +1,10 @@
+version: "3"
+
+services:
+  app:
+    build: .
+    container_name: favorite_project_app
+    ports:
+      - 8000:3000
+    volumes:
+      - .:/home/node/app

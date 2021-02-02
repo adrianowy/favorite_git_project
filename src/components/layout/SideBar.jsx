@@ -79,7 +79,9 @@ export default function TopBar(props){
           </IconButton>
         </div>
         <Divider />
-        <List>{ListItemMenu}</List>
+        <List>
+          <ListItemMenu />
+        </List>
       </Drawer>
     )
 }
