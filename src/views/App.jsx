@@ -13,6 +13,7 @@ import { CssBaseline, makeStyles } from '@material-ui/core';
 import Home from "./pages/Home/Home";
 import Users from "./pages/Users/Users";
 import Projects from "./pages/Projects/Projects";
+import Favorites from "./pages/Favorites/Favorites";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -56,7 +57,8 @@ export default function App() {
             <div className={classes.appBarSpacer} />
               <Route path="/" exact component={Home}/>
               <Route path="/users" component={Users} />
-              <Route path="/projects" component={Projects} />
+              <Route path="/projects/:userId" component={Projects} />
+              <Route path="/favorites" component={Favorites} />
           </main>
           </BrowserRouter>
       </div>

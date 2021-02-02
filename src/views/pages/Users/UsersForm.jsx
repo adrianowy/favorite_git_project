@@ -10,10 +10,16 @@ import Alert from '@material-ui/lab/Alert';
 
 
 export default function UsersForm(props){
+
     return (
         <Box>
             <form noValidate autoComplete="off" onSubmit={props.handleAdduser}>
-            <TextField id="user" label="User Name" variant="outlined" onKeyUp={e => props.setUserName(e.target.value)}/>
+            <TextField
+                id="user" 
+                label="User Name" 
+                variant="outlined"
+                onKeyUp={e => props.setUserName(e.target.value)}
+            />
             
             { props.error && <Alert severity="error">The field 'User Name' must to be filled.</Alert>}
             

@@ -14,16 +14,9 @@ export default function ListItemMenu(){
   const classes = useStyles();
 
   const menus = [
-    {
-      title: "Home",
-      icon: "home",
-      to: "/"
-    },
-    {
-      title: "Users",
-      icon: "people",
-      to: "/users"
-    }
+    { title: "Home", icon: "home", to: "/" },
+    { title: "Users", icon: "people", to: "/users" },
+    { title: "Favorites", icon: "start", to: "/favorites" }
   ]
 
   return (

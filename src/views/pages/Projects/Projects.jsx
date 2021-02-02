@@ -15,7 +15,7 @@ import {
     makeStyles
 } from '@material-ui/core'
 
-import ProjectsDataGrid from './ProjectsDataGrid'
+import ProjectsList from './ProjectsList'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -36,64 +36,98 @@ const languages = [
     { id: 8, lang: "c"}
 ];
 
-// columns name for datatable
-const columns = [
-    { field: 'id', headerName: 'ID', width: 70 },
-    { field: 'owner', headerName: 'Owner'},
-    { field: 'project', headerName: 'Project Name'}
-];
-
 
 export default function Projects(props){
 
     const classes = useStyles();
 
     const [searchLanguage, setSearchLanguage] = useState("");
+    const [loading, setLoading] = useState(false);
     const [repositories, setRepositories] = useState([]);
 
-    function handleSearchRepo(e){
-        setSearchLanguage(e.target.value);
+    const [activeUser, setActiveUser] = useState([]);
+
+    function handleSearchRepo(v){
+        setSearchLanguage(v);
+        setRepositories([]);
     }
+
+    function handleFavorite(repo){
+        
+        const newRepositories = repositories.map(mapRepo => {
+            return mapRepo.id === repo.id ? { ...mapRepo, favorite: !mapRepo.favorite } : mapRepo
+        });
+        setRepositories(newRepositories);
+
+
+        /** UPDATE LOCAL STORAGE */
+        const updateUsersFavorite = JSON.parse(localStorage.getItem('users')).map(mapUser => {
+
+            if(mapUser.id === activeUser.id) {
+                if(mapUser.favorites.filter(fav => fav.id === repo.id).length == 0 ){
+                    mapUser.favorites.push(repo);
+                }else{
+                    mapUser.favorites = mapUser.favorites.filter(fav => fav.id !== repo.id);
+                }
+                setActiveUser(mapUser);
+            }
+            return mapUser;
+        });
+        localStorage.setItem('users', JSON.stringify(updateUsersFavorite));
+        /** END - UPDATE LOCAL STORAGE */
+
+    }
+
+    
+    useEffect(() => {
+
+        const user = JSON.parse(localStorage.getItem('users')).filter(u => {
+            return u.id === props.match.params.userId
+        });
+
+        setActiveUser(user[0]);
+
+    }, []);
 
     useEffect(async () => {
 
-        axios.get('https://api.github.com/search/issues?q=language:'+searchLanguage)
-            .then(function (response) {    
+        if(searchLanguage){
+            setLoading(true);
+            axios.get('https://api.github.com/search/issues?q=language:'+searchLanguage)
+                .then(function (response) {    
 
-                let rows = response.data.items.map(item => (
-                    {
-                        id: item.id,
-                        owner: item.user.login,
-                        project: item.title,
-                        reference: item.repository_url.replace("api.", "").replace("repos/", "")
-                    }
-                ));
+                    const rows = response.data.items.map(item => (
+                        {
+                            id: item.id,
+                            owner: item.user.login,
+                            project: item.title,
+                            reference: item.repository_url.replace("api.", "").replace("repos/", ""),
+                            favorite : ( (activeUser.favorites.filter(f => f.id == item.id).length > 0) ? true : false)
+                        }
+                    ));
+                    setRepositories(rows);
+                    setLoading(false);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                })
 
-                setRepositories(rows);
-
-                // setRepositories(response.data.items);
-                // console.log(response);
-            })
-            .catch(function (error) {
-                console.log(error);
-            })
-        
-        console.log(repositories);
+        } // end if
 
     }, [searchLanguage]);
 
     /**
+     * References:
      * material ui form > https://www.youtube.com/watch?v=-XKaSCU0ZLM
      * hooks > https://www.youtube.com/watch?v=6WB16wZS61c
      * repository > https://docs.github.com/pt/rest/reference/search#search-repositories
-     * 
      */
 
     return (
         <Box m={2}>
 			<Grid container spacing={2}>
 				<Grid item xs={12}>
-					<Typography variant="h5" gutterBottom> Adriano's Favorite Projects </Typography>
+					<Typography variant="h5" gutterBottom> {activeUser.name} - Favorite Projects </Typography>
 					<Divider />
                 </Grid>
 
@@ -106,12 +140,12 @@ export default function Projects(props){
                                 id="demo-simple-select-outlined"
                                 label="Language"
                                 name="Language"
-                                onChange={handleSearchRepo}
+                                onChange={(e) => handleSearchRepo(e.target.value)}
+                                style={{width: '300px'}}
                                 >
-                                <MenuItem value=""> <em>None</em> </MenuItem>
                                 {
                                     languages.map(l => (
-                                        <MenuItem key={l.id} value={l.lang}>{l.lang.toUpperCase()}</MenuItem>
+                                        <MenuItem key={l.id} value={l.lang}> {l.lang.toUpperCase()} </MenuItem>
                                     ))
                                 }
                             </Select>
@@ -120,9 +154,20 @@ export default function Projects(props){
                     <br/>
 
                     {
+                        loading &&
+                        <Paper className={classes.paper} elevation={3}>
+                            <p>Loading...</p>
+                        </Paper>
+                    }
+
+                    {
                         repositories.length > 0 && 
                         <Paper className={classes.paper} elevation={3}>
-                            <ProjectsDataGrid rows={repositories} columns={columns}/>
+                            <ProjectsList
+                                handleFavorite={handleFavorite} 
+                                repositories={repositories} 
+                                activeUser={activeUser}
+                            />
                         </Paper>
                     }
 				</Grid>

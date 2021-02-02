@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 import {
 	Grid,
@@ -8,6 +9,8 @@ import {
     Icon,
     ListItemIcon,
     ListItemText,
+    ListItemSecondaryAction,
+    IconButton,
 	makeStyles
 } from '@material-ui/core'
 
@@ -18,14 +21,23 @@ export default function UsersList(props){
                 Users List
             </Typography>
             {
+                
+
                 props.users.length > 0 ?
 
-                props.users.map((user, i) => (
-                    <div key={i}>
+                props.users.map(user => (
+                    <div key={user.id}>
                         <List>
                             <ListItem>
                                 <ListItemIcon><Icon>person</Icon></ListItemIcon>
-                                <ListItemText primary={user}/>
+                                <ListItemText primary={user.name+' ('+user.favorites.length+')'}/>
+                                <Link to={"/projects/"+user.id} style={{ color: 'inherit', textDecoration: 'none' }} params={{ id: 'asd' }} >
+                                    <ListItemSecondaryAction>
+                                        <IconButton edge="end" aria-label="link" title="Choose the Favorite Projects">
+                                            <Icon>launch</Icon>
+                                        </IconButton>
+                                    </ListItemSecondaryAction>
+                                </Link>
                             </ListItem>
                         </List>
                     </div>
